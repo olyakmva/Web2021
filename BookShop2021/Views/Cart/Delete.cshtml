@@ -1,0 +1,46 @@
+﻿@model BookShop2021.Models.CartItem
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+<h3>Вы уверены, что хотите удалить эту книгу?</h3>
+<div>
+   <br/>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SelectBook.Author)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SelectBook.Author)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SelectBook.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SelectBook.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SelectBook.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SelectBook.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-default" /> |
+        <a asp-action="Index" class="btn btn-default">Назад</a>
+    </form>
+</div>

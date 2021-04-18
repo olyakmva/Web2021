@@ -1,0 +1,85 @@
+﻿@model IEnumerable<BookShop2021.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Ваша корзина</h2>
+
+@{
+    string msg = (string) ViewBag.Msg;
+    if (msg.Contains("Ваша корзина пуста"))
+    {
+        <h3>@msg</h3>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SelectBook.Author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SelectBook.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SelectBook.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SelectBook.Author)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SelectBook.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SelectBook.Price)
+                    </td>
+                    <td>
+                        <input type="number" step="1" min="1" max="1000" id="quantity" value="@item.Quantity" onchange="onItemQuantityChanged(event, @item.Id)"/>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <p>Общая стоимость: <span id="totalCost">@ViewBag.Sum</span></p>
+        <br/>
+        @Html.RouteLink("Оформить заказ",
+            new {controller = "Order", action = "Create"})
+        <span>  </span>
+    }
+}
+@Html.RouteLink("Продолжить покупки",
+    new { controller = "Home", action = "Index" })
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    function onItemQuantityChanged(e, cartId) {
+
+        axios.post(
+            "/Cart/ChangeItemQuantity",
+            {
+                id: cartId,
+                newQuantity: parseInt(e.target.value, 10)
+            }
+        ).then((responseResult) => {
+            var totalCost = parseInt($("#totalCost").text(), 10);
+            totalCost += responseResult.data.delta;
+            $("#totalCost").text(totalCost.toString());
+            $("#cartCount").text(responseResult.data.cartCount);
+        });
+    }
+</script>

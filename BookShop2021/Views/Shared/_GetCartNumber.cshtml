@@ -1,0 +1,26 @@
+﻿@inject BookContext db;
+@{
+    string cartId = null;
+    if (this.Context.Request.Cookies.Keys.Count > 0 &&
+        this.Context.Request.Cookies.Keys.Contains("CartId"))
+    {
+        cartId = this.Context.Request.Cookies["CartId"];
+    }
+
+    int res = 0;
+    if (cartId != null)
+    {
+        res = db.ShoppingCarts.Where(c => c.CartId == cartId).Sum(c => c.Quantity);
+    }
+    int count = res;
+
+}
+@{
+    if (count > 0)
+    {
+        <span style="color: floralwhite; padding-top: 15px; padding-bottom: 15px" id="cartCount" class="nav navbar-nav">@count</span>
+    }
+}
+
+       
+
