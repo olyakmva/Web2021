@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -64,7 +63,7 @@ namespace BookShop2021.Controllers
                 books = db.Books.ToList();
             }
             List<Category> Genres = db.Categories.ToList();
-            Genres.Add(new Category() { Name = "все", Id = 0 });
+            Genres.Insert(0, new Category() { Name = "все", Id = 0 });
             SelectList listItems = new SelectList(Genres, "Id", "Name");
             ViewBag.Genres = listItems;
             return View(books);

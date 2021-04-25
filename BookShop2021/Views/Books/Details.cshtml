@@ -4,10 +4,9 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
 
 <div>
-    <h4>Book</h4>
+    <h4>Информация о книге</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -41,20 +40,24 @@
             @Html.DisplayFor(model => model.Category.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Number)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Number)
         </dd>
+        <dt>
+            Обложка:
+        </dt>
+        <dd>
+            @if (Model.ImageUrl != null)
+            {
+                <img src="@Url.Content("~/images/")@Model.ImageUrl"/>
+            }
+        </dd>
+
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Изменить</a> |
+    <a asp-action="Index">Назад к списку книг</a>
 </div>

@@ -4,13 +4,12 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Добавление новой книги</h2>
 
-<h4>Book</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" asp-controller="Books" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Author" class="control-label"></label>
@@ -34,12 +33,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Number" class="control-label"></label>
@@ -47,13 +41,18 @@
                 <span asp-validation-for="Number" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <label class="control-label">Выберите файл для загрузки</label>
+                <input type="file" name="upload" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Назад к списку книг</a>
 </div>
 

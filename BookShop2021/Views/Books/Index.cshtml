@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Список книг</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать новую</a>
 </p>
 <table class="table">
     <thead>
@@ -27,9 +27,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.Number)
             </th>
@@ -54,16 +52,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
+           
             <td>
                 @Html.DisplayFor(modelItem => item.Number)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробно</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
 }

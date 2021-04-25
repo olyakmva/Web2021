@@ -6,6 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookShop2021.Models;
+using Microsoft.AspNetCore.Http;
+using System.Drawing;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace BookShop2021.Controllers
 {
@@ -13,9 +19,11 @@ namespace BookShop2021.Controllers
     {
         private readonly BookContext _context;
 
-        public BooksController(BookContext context)
+        IHostingEnvironment _environment;
+        public BooksController(BookContext context, IHostingEnvironment env )
         {
             _context = context;
+            _environment = env;
         }
 
         // GET: Books
@@ -52,12 +60,21 @@ namespace BookShop2021.Controllers
         }
 
         // POST: Books/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Author,Name,Price,Year,CategoryId,ImageUrl,Number")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Author,Name,Price,Year,CategoryId,Number")] Book book,
+            IFormFile upload)
         {
+            if(upload !=null)
+            {
+                string fileName = System.IO.Path.GetFileName(upload.FileName);
+                //check for graphics
+                if (CheckByGraphicsFormat(fileName))
+                {
+                    Save(upload, fileName);
+                    book.ImageUrl = fileName;
+                }
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(book);
@@ -66,6 +83,56 @@ namespace BookShop2021.Controllers
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", book.CategoryId);
             return View(book);
+        }
+        private bool CheckByGraphicsFormat(string fileName)
+        {
+            var ext = fileName.Substring(fileName.Length - 3);
+            return string.CompareOrdinal(ext, "png") == 0 || string.CompareOrdinal(ext, "jpg") == 0;
+        }
+
+        private void Save(IFormFile upload, string fileName)
+        {
+            Bitmap image = new Bitmap(upload.OpenReadStream());
+            int width = 150;
+            int height = 200;
+            var smallImage = Resize(image, width, height);
+            string path = "\\wwwroot\\images\\" + fileName;
+            var root = _environment.ContentRootPath;
+            path = root+ path;
+            // сохраняем файл в папку  в каталоге wwwroot
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                smallImage.Save(fileStream, ImageFormat.Jpeg);   
+            }
+        }
+        /// <summary>
+        /// Resize the image to the specified width and height.
+        /// </summary>
+        /// <param name="image">The image to resize.</param>
+        /// <param name="width">The width to resize to.</param>
+        /// <param name="height">The height to resize to.</param>
+        /// <returns>The resized image.</returns>
+        private Bitmap Resize(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+            return destImage;
         }
 
         // GET: Books/Edit/5
@@ -86,17 +153,23 @@ namespace BookShop2021.Controllers
         }
 
         // POST: Books/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Author,Name,Price,Year,CategoryId,ImageUrl,Number")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Author,Name,Price,Year,CategoryId,ImageUrl,Number")] Book book,IFormFile upload)
         {
             if (id != book.Id)
             {
                 return NotFound();
             }
-
+            if (upload != null)
+            {
+                string fileName = System.IO.Path.GetFileName(upload.FileName);
+                if (CheckByGraphicsFormat(fileName))
+                {
+                    Save(upload, fileName);
+                    book.ImageUrl = fileName;
+                }
+            }
             if (ModelState.IsValid)
             {
                 try
