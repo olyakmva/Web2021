@@ -4,33 +4,27 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Оформление заказа</h2>
+<h2>Ваш заказ:</h2>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="Date" />
             <input type="hidden" asp-for="Status" />
+            <input type="hidden" asp-for="Date" />
+            <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="DeliveryMethod" />
-
-            <h3> Ваш заказ, на сумму: </h3>
-
-            <div class="form-group">
-                <label asp-for="TotalPrice" class="control-label"></label>
-                <input asp-for="TotalPrice" class="form-control" />
-                <span asp-validation-for="TotalPrice" class="text-danger"></span>
-            </div>
-            <h3> будет доставлен по адресу: </h3>
+            <input type="hidden" asp-for="TotalPrice" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h4> на общую сумму : @Model.TotalPrice рублей</h4>
+            <br />
+            <h4> будет доставлен по адресу:</h4>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-
-            <h3> для: </h3>
-
+            <h4> Ваше имя: </h4>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
@@ -48,9 +42,13 @@
         </form>
     </div>
 </div>
+<form asp-action="Delete" >
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Отменить" class="btn btn-default" /> 
+ </form>
 
 <div>
-    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-default">Продолжить покупки</a>
+    <a asp-action="Index" asp-controller="Cart">Назад</a>
 </div>
 
 @section Scripts {

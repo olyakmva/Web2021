@@ -46,7 +46,7 @@
                         @Html.DisplayFor(modelItem => item.SelectBook.Price)
                     </td>
                     <td>
-                        <input type="number" step="1" min="1" max="1000" id="quantity" value="@item.Quantity" onchange="onItemQuantityChanged(event, @item.Id)"/>
+                        <input type="number" min="1" max="1000" id="quantity" value="@item.Quantity" onchange="onItemQuantityChanged(event, @item.Id)"/>
                     </td>
                     <td>
                         <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
@@ -75,11 +75,11 @@
                 id: cartId,
                 newQuantity: parseInt(e.target.value, 10)
             }
-        ).then((responseResult) => {
+        ).then((response) => {
             var totalCost = parseInt($("#totalCost").text(), 10);
-            totalCost += responseResult.data.delta;
+            totalCost += response.data.delta;
             $("#totalCost").text(totalCost.toString());
-            $("#cartCount").text(responseResult.data.cartCount);
+            $("#cartCount").text(response.data.cartCount);
         });
     }
 </script>

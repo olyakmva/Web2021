@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "Success";
+}
+
+<h2>@ViewBag.Msg</h2>
+
+<br/>
+@Html.RouteLink("Продолжить покупки",
+    new { controller = "Home", action = "Index" })
+
+

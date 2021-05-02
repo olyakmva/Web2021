@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BookShop2021.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.RegularExpressions;
 
 namespace BookShop2021.Controllers
 {
@@ -13,7 +17,7 @@ namespace BookShop2021.Controllers
         public HomeController(BookContext context)
         {
             db = context;
-                //Init();
+            //Init();
         }
 
         private void Init()
@@ -63,13 +67,66 @@ namespace BookShop2021.Controllers
                 books = db.Books.ToList();
             }
             List<Category> Genres = db.Categories.ToList();
-            Genres.Insert(0, new Category() { Name = "все", Id = 0 });
+            Genres.Insert(0,new Category() { Name = "все", Id = 0 });
             SelectList listItems = new SelectList(Genres, "Id", "Name");
             ViewBag.Genres = listItems;
             return View(books);
         }
+        public IActionResult Search(string searchString)
+        {
+            List<Book> results = new List<Book>();
+            if (searchString != null)
+            {
+                searchString = searchString.ToLower();
+                Regex rg = new Regex(@"\w+");
+                var matches = rg.Matches(searchString);
+               
+                foreach (var match in matches)
+                {
+                    var word = match.ToString();
+                    var list = db.Books
+                        .Where(b => b.Author.ToLower().Contains(word) ||
+                         b.Name.ToLower().Contains(word)).ToList();
+                    results.AddRange(list);
+                }
+            }
+            if (results.Count > 0)
+            {
+                ViewBag.Msg = "Книги по Вашему запросу";
+            }
+            else
+            {
+                ViewBag.Msg = "К сожалению, мы ничего не нашли :(. " +
+                    "Но Вы можете обратить внимание на наши бестселлеры ";
+                var bestsellers = db.Items.GroupBy(c=>c.BookId)
+                    .Select(group => new {
+                        id = group.Key,
+                        Count = group.Count()
+                    }).OrderByDescending(x => x.Count).Take(3).ToList();
+                foreach(var item in bestsellers)
+                {
+                    var book = db.Books.Find(item.id);
+                    if(book!=null)
+                        results.Add(book);
+                }
+            }
+            return View(results);
+        }
 
-       
+        public IActionResult About()
+        {
+            ViewData["Message"] = "Your application description page.";
+
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            ViewData["Message"] = "Your contact page.";
+
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

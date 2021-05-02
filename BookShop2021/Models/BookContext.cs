@@ -9,6 +9,7 @@ namespace BookShop2021.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<CartItem> ShoppingCarts { get; set; }
+        public DbSet<Client> Clients { get; set; }
         public BookContext(DbContextOptions<BookContext> options)
              : base(options)
         {

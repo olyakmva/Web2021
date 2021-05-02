@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BookShop2021.Models;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using BookShop2021.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookShop2021.Controllers
@@ -10,108 +11,103 @@ namespace BookShop2021.Controllers
     public class OrderController : Controller
     {
         BookContext db;
+
         public OrderController(BookContext context)
         {
             db = context;
         }
-        string GetCooki(string key)
+        string GetCookie(string key)
         {
+            string cartId = null;
             if (HttpContext.Request.Cookies.Keys.Count > 0 &&
                 HttpContext.Request.Cookies.Keys.Contains(key))
             {
-                return HttpContext.Request.Cookies[key];
+                cartId = HttpContext.Request.Cookies[key];
             }
-            return null;
+            return cartId;
         }
         public IActionResult Create()
         {
-            string cartId = GetCooki("CartId");
+            string cartId = GetCookie("CartId");
             if (cartId == null)
-            {
                 return RedirectToAction("Index", "Home");
-            }
-            var items = db.ShoppingCarts.Where(c => string.Compare(c.CartId, cartId, StringComparison.Ordinal) == 0).ToList();
-            Order newOrder = new Order();
-            List<Item> goods = new List<Item>();
+            var items = db.ShoppingCarts
+                .Where(c => c.CartId == cartId)
+                .ToList();
+            var order = new Order();
+            var goods = new List<Item>();
             int price = 0;
-            foreach (var i in items)
+            foreach(var item in items)
             {
-                var b = db.Books.Find(i.BookId);
-                if (b == null) continue;
-                var tm = new Item() { BookId = i.BookId, Quantity = i.Quantity, TheBook = b };
-                price += b.Price * i.Quantity;
-                goods.Add(tm);
+                var book = db.Books.Find(item.BookId);
+                if (book == null) continue;
+                var good = new Item
+                {
+                    BookId = book.Id,
+                    Quantity = item.Quantity,
+                    TheBook = book
+                };
+                goods.Add(good);
+                price += book.Price * item.Quantity;
             }
-
-            newOrder.TotalPrice = price;
-            newOrder.Items = goods;
-            newOrder.Date = DateTime.Now;
-            newOrder.Status = "не подтвержден";
-            newOrder.DeliveryMethod = "Самовывоз";
-            newOrder.LastName = "Введите фамилию";
-            newOrder.Name = "Введите имя";
-            newOrder.Items = goods;
-            db.Orders.Add(newOrder);
+            order.Items = goods;
+            order.TotalPrice = price;
+            order.Status = "не подтвержден";
+            order.LastName = "Введите фамилию";
+            order.Name = "Введите имя";
+            order.DeliveryMethod = "курьером";
+            order.Address = "Введите адрес";
+            order.Date = DateTime.Now;
+            db.Orders.Add(order);
             db.Items.AddRange(goods);
             db.SaveChanges();
-          
-            return View(newOrder);
+            return View(order);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("Id,Name,LastName,TotalPrice,Status,DeliveryMethod,Date,Address")]Order order)
+        public IActionResult Create([Bind("Id,Date,Name,LastName,TotalPrice,Address,DeliveryMethod")]Order order)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 order.Status = "подтвержден";
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
-                RemoveCartRecords();
-                return RedirectToAction("Index", "Home");
+                ///TODO : decrease book number
+                string cartId = GetCookie("CartId");
+                if (cartId != null)
+                {
+                    var carts = db.ShoppingCarts
+                        .Where(c => c.CartId == cartId)
+                        .ToList();
+                    db.ShoppingCarts.RemoveRange(carts);
+                    db.SaveChanges();
+                    HttpContext.Response.Cookies.Delete("CartId");
+                }
+                return RedirectToAction("Success");
             }
-
             return View();
         }
-        private void RemoveCartRecords()
+        public IActionResult Success()
         {
-            string cartId = GetCooki("CartId");
-            if (cartId == null) return;
-            var carts = db.ShoppingCarts.Where(x => x.CartId == cartId);
-            db.ShoppingCarts.RemoveRange(carts);
-            db.SaveChanges();
-            HttpContext.Response.Cookies.Delete("CartId");
+            ViewBag.Msg = "Ваш заказ подтвержден и скоро к Вам приедет.";
+            return View();
         }
 
-        // GET: /Order/Delete/5
         public IActionResult Delete(int? id)
         {
+           
             if (id == null)
-            {
                 return BadRequest();
-            }
             Order order = db.Orders.Find(id);
             if (order == null)
-            {
                 return NotFound();
-            }
-
-            var items = db.Items.Where(x => x.OrderId == order.Id);
-            var list = items.ToList();
-            foreach (var item in list)
-            {
-                var book = db.Books.Find(item.BookId);
-                if (book != null)
-                {
-                    book.Number += item.Quantity;
-                    db.Entry(book).State = EntityState.Modified;
-                }
-                db.SaveChanges();
-            }
-
+            var items = db.Items.Where(x => x.OrderId == id).ToList();
+            order.Items = items;
             db.Orders.Remove(order);
             db.SaveChanges();
             return RedirectToAction("Index", "Home");
+
         }
+
 
     }
 }
