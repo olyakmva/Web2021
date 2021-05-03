@@ -13,7 +13,7 @@ namespace BookShop2021.Models
         public BookContext(DbContextOptions<BookContext> options)
              : base(options)
         {
-            
+            //Database.EnsureDeleted();
             //Database.EnsureCreated();   // создаем базу данных при первом обращении
         }
 

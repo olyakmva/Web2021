@@ -7,50 +7,107 @@
 <h2>Ваш заказ:</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <input type="hidden" asp-for="Status" />
-            <input type="hidden" asp-for="Date" />
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="DeliveryMethod" />
-            <input type="hidden" asp-for="TotalPrice" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <h4> на общую сумму : @Model.TotalPrice рублей</h4>
-            <br />
-            <h4> будет доставлен по адресу:</h4>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <h4> Ваше имя: </h4>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container">
+   <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <input type="hidden" asp-for="Status" />
+                <input type="hidden" asp-for="Date" />
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="DeliveryMethod" />
+                <input type="hidden" asp-for="TotalPrice" />
+                <input type="hidden" asp-for="ClientId" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <h3>на сумму: </h3>
+                @if (ViewBag.Discount > 0)
+                {
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            @ViewBag.Cost p.
+                        </div>
+                        <div class="col-md-3">
+                            Скидка: @ViewBag.Discount p.
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-2">
+                            Итого:
+                        </div>
+                        <div class="col-md-3">
+                            <span class="font-weight-bold">@Model.TotalPrice p.</span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.TotalPrice, new { @class = "col-form-label col-md-2" })
+                        <div class="col-md-3">
+                            @Html.DisplayFor(model => model.TotalPrice) p.
+                        </div>
+                    </div>
+                }
+                <br />
+                <h4> будет доставлен по адресу:</h4>
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <h4> Ваше имя: </h4>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Подтвердить" class="btn btn-info" />
+                </div>
+            </form>
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="Отменить" class="btn btn-secondary" />
+            </form>
+        </div>
+
+       @if (!User.Identity.IsAuthenticated)
+       {
+        <div class="col-md-5">
+            <h4> Уважаемый покупатель! </h4>
+            <p> Вы можете оформить заказ в нашем магазине без регистрации. </p>
+            <p>
+                Зарегистрированные пользователи автоматически принимают участие
+                в нашей скидочной программе: скидка на все 5% уже после первого заказа!
+            </p>
+            <p>
+                Подробнее о нашей программе лояльности вы можете почитать
+                @Html.RouteLink("здесь.", new { controller = "Home", action = "About" }, new { @class = "font-weight-bold" }))
+            </p>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-info">Регистрация</a>
+                </div>
+                <div class="col-md-3 offset-md-1">
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-info"> Вход</a>
+                </div>
             </div>
 
-            <div class="form-group">
-                <input type="submit" value="Подтвердить" class="btn btn-default" />
-            </div>
-        </form>
+        </div>
+    }
+   </div>
+
+
+    <div>
+        <a asp-action="Index" asp-controller="Cart">Назад</a>
     </div>
 </div>
-<form asp-action="Delete" >
-    <input type="hidden" asp-for="Id" />
-    <input type="submit" value="Отменить" class="btn btn-default" /> 
- </form>
-
-<div>
-    <a asp-action="Index" asp-controller="Cart">Назад</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

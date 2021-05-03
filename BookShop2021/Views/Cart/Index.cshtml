@@ -57,13 +57,11 @@
         </table>
         <p>Общая стоимость: <span id="totalCost">@ViewBag.Sum</span></p>
         <br/>
-        @Html.RouteLink("Оформить заказ",
-            new {controller = "Order", action = "Create"})
+        <a asp-action="Create" asp-controller="Order" class="btn btn-info"> Оформить заказ</a>
         <span>  </span>
     }
 }
-@Html.RouteLink("Продолжить покупки",
-    new { controller = "Home", action = "Index" })
+<a asp-action="Index" asp-controller="Home" class="btn btn-info"> Продолжить покупки</a>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>

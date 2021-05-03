@@ -16,6 +16,9 @@ namespace BookShop2021.Models
         [Display(Name = "Общая стоимость")]
         public int TotalPrice { get; set; }
 
+        [HiddenInput(DisplayValue = false)]
+        public string ClientId { get; set; } // ID покупателя
+
         public DateTime Date { get; set; } // дата покупки
         public IEnumerable<Item> Items { get; set; }
 

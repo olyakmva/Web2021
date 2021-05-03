@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BookShop2021.Models;
 using Microsoft.EntityFrameworkCore;
@@ -57,21 +56,20 @@ namespace BookShop2021.Controllers
 
         public IActionResult Index(int categoryId=0)
         {
-            List<Book> books;
-            if (categoryId >0)
-            {
-                books = db.Books.Where(b => b.CategoryId == categoryId).ToList();
-            }
-            else
-            {
-                books = db.Books.ToList();
-            }
-            List<Category> Genres = db.Categories.ToList();
-            Genres.Insert(0,new Category() { Name = "все", Id = 0 });
-            SelectList listItems = new SelectList(Genres, "Id", "Name");
-            ViewBag.Genres = listItems;
+            var books = categoryId >0 ? db.Books.Where(b => b.CategoryId == categoryId).ToList() : db.Books.ToList();
+            ViewBag.Genres = GetCategoriesList(); 
+            ViewBag.Msg = "Наши книги";
             return View(books);
         }
+
+        private SelectList GetCategoriesList()
+        {
+            List<Category> genres = db.Categories.ToList();
+            genres.Insert(0, new Category() {Name = "все", Id = 0});
+            SelectList listItems = new SelectList(genres, "Id", "Name");
+            return listItems;
+        }
+
         public IActionResult Search(string searchString)
         {
             List<Book> results = new List<Book>();
@@ -89,6 +87,7 @@ namespace BookShop2021.Controllers
                          b.Name.ToLower().Contains(word)).ToList();
                     results.AddRange(list);
                 }
+                results = (from item in results select item).Distinct().ToList();
             }
             if (results.Count > 0)
             {
@@ -110,23 +109,15 @@ namespace BookShop2021.Controllers
                         results.Add(book);
                 }
             }
-            return View(results);
+            ViewBag.Genres = GetCategoriesList();
+            return View("Index",results);
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
+        
         public IActionResult Privacy()
         {
             return View();

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Наши книги</h2>
+<h2>@ViewBag.Msg</h2>
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Get))
 {
@@ -13,11 +13,11 @@
     <input type="submit" value="Показать" />
 }
 
-<div class="justify-content-around row">
+<div class="row justify-content-around row-cols-4">
  @foreach(var book in Model)
  {
      <div class="col-md-auto">
-         <div class="card" style="width: 12rem;">
+         <div class="card" style="width: 10rem;">
              <img src="@Url.Content("~/images/")@book.ImageUrl" class="card-img-top"/>
              <div class="card-body">
                  <h5 class="card-title">@book.Price руб.</h5>

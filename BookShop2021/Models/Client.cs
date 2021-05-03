@@ -23,7 +23,7 @@ namespace BookShop2021.Models
 
         [Required]
         [HiddenInput(DisplayValue = false)]
-        public decimal TotalOrdersCost { get; set; }
+        public int TotalOrdersCost { get; set; }
 
         [Required]
         [HiddenInput(DisplayValue = false)]
