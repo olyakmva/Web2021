@@ -1,14 +1,17 @@
-﻿@model IEnumerable<BookShop2021.Models.Book>
+﻿@using System.Web
+@model IEnumerable<BookShop2021.Models.Book>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h2>Список книг</h2>
-
+<hr/>
+<br/>
 <p>
-    <a asp-action="Create">Создать новую</a>
+    <a asp-action="Create" class="btn btn-secondary">Создать новую</a>
 </p>
+<br/>
 <table class="table">
     <thead>
         <tr>
@@ -57,9 +60,9 @@
                 @Html.DisplayFor(modelItem => item.Number)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Подробно</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">@HttpUtility.HtmlDecode("&#9999;")</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">@HttpUtility.HtmlDecode("&#128270;")</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">@HttpUtility.HtmlDecode("&#10060;")</a>
             </td>
         </tr>
 }

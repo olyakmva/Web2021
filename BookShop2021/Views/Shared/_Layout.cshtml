@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BookShop2021</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
           crossorigin="anonymous">
@@ -11,68 +17,55 @@
             integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
             crossorigin="anonymous"></script>
     <environment include="Development">
-            <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
-            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <div class="navbar-header">
-                @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>*@
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">BookShop2021</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">Каталог</a></li>
-                    <li><a asp-area="" asp-controller="Books" asp-action="Index" class="nav-link">Управление книгами</a></li>
-                    <li><a asp-area="" asp-controller="Cart" asp-action="Index" class="nav-link">Корзина</a></li>
-                    <li> <partial name="_GetCartNumber" /> </li>
-                </ul>
-                
-
-                <form asp-action="Search" asp-controller="Home" class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" name="searchString" placeholder="Поиск">
-                    <button class="btn btn-light my-2 my-sm-0" type="submit">Поиск</button>
-                </form>
-
-                <partial name="_LoginPartial" />
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <div class="navbar-header">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">BookShop2021</a>
         </div>
-    </nav>
+        <div class="navbar-collapse collapse">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li><a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">Каталог</a></li>
+                <li><a asp-area="" asp-controller="Books" asp-action="Index" class="nav-link">Управление книгами</a></li>
+                <li><a asp-area="" asp-controller="Cart" asp-action="Index" class="nav-link">Корзина</a></li>
+                <li> <partial name="_GetCartNumber"/> </li>
+            </ul>
 
-    <partial name="_CookieConsentPartial" />
+            <form asp-action="Search" asp-controller="Home" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" name="searchString" placeholder="Поиск">
+                <button class="btn btn-info my-2 my-sm-0" type="submit">Поиск</button>
+            </form>
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2021 - BookShop2021</p>
-        </footer>
+            <partial name="_LoginPartial"/>
+        </div>
     </div>
-    
+</nav>
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+<partial name="_CookieConsentPartial"/>
 
-    @RenderSection("Scripts", required: false)
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; 2021 - BookShop2021</p>
+    </footer>
+</div>
+
+
+<environment include="Development">
+@*    <script src="~/lib/jquery/dist/jquery.js"></script>*@
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</environment>
+<environment exclude="Development">
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+</environment>
+
+@RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -4,25 +4,31 @@
     ViewData["Title"] = "Edit";
 }
 
+<br />
 <h2>Редактирование информации о книге</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="ImageUrl" />
-            <div class="form-group">
+<br />
+
+<div class="row col-md-8">
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ImageUrl" />
+        <div class="form-row">
+            <div class="form-group col-md-6">
                 <label asp-for="Author" class="control-label"></label>
                 <input asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+        </div>
+        <div class="form-row">
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
@@ -34,32 +40,29 @@
                 <span asp-validation-for="Year" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Number" class="control-label"></label>
                 <input asp-for="Number" class="form-control" />
                 <span asp-validation-for="Number" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label class="control-label">Обложка</label>
-                @if (Model.ImageUrl != null)
-                {
-                    <img src="@Url.Content("~/images/")@Model.ImageUrl" />
-                }
-                <label class="control-label">Выберите файл для загрузки</label>
-                <input type="file" name="upload" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Назад к списку книгу</a>
+        </div>
+        <div class="form-group">
+            <label asp-for="Category" class="control-label"></label>
+            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Обложка</label>
+            @if (Model.ImageUrl != null)
+            {
+                <img src="@Url.Content("~/images/")@Model.ImageUrl" />
+            }
+            <label class="control-label">Выберите файл для загрузки</label>
+            <input type="file" name="upload" class="form-control" />
+        </div>
+        <div class="row">
+            <input type="submit" value="Сохранить" class="btn btn-secondary" /><span> | </span>
+            <a asp-action="Index" class="btn btn-secondary">Назад к списку книг</a>
+        </div>
+    </form>
 </div>
-

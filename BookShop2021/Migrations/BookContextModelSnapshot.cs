@@ -162,6 +162,27 @@ namespace BookShop2021.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("BookShop2021.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId");
+
+                    b.Property<string>("ClientId");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Reviews");
+                });
+
             modelBuilder.Entity("BookShop2021.Models.Book", b =>
                 {
                     b.HasOne("BookShop2021.Models.Category", "Category")
@@ -188,6 +209,13 @@ namespace BookShop2021.Migrations
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookShop2021.Models.Review", b =>
+                {
+                    b.HasOne("BookShop2021.Models.Client", "Owner")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
                 });
 #pragma warning restore 612, 618
         }

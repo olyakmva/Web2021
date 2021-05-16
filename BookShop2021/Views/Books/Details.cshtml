@@ -4,10 +4,13 @@
     ViewData["Title"] = "Details";
 }
 
-
+<br />
 <div>
     <h4>Информация о книге</h4>
     <hr />
+    <br/>
+    @*<div class="row col-md-8 col col-md-offset-2 col-lg-6 col-lg-offset-3">
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Author)
@@ -51,7 +54,7 @@
         <dd>
             @if (Model.ImageUrl != null)
             {
-                <img src="@Url.Content("~/images/")@Model.ImageUrl"/>
+                <img src="@Url.Content("~/images/")@Model.ImageUrl" />
             }
         </dd>
 
@@ -60,4 +63,4 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Изменить</a> |
     <a asp-action="Index">Назад к списку книг</a>
-</div>
+</div>*@

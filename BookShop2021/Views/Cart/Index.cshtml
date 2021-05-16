@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BookShop2021.Models.CartItem>
+﻿@using System.Web
+@model IEnumerable<BookShop2021.Models.CartItem>
 
 @{
     ViewData["Title"] = "Index";
@@ -49,7 +50,7 @@
                         <input type="number" min="1" max="1000" id="quantity" value="@item.Quantity" onchange="onItemQuantityChanged(event, @item.Id)"/>
                     </td>
                     <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">@HttpUtility.HtmlDecode("&#10060;")</a>
                     </td>
                 </tr>
             }
