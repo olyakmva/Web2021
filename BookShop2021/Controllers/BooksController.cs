@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using BookShop2021.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using BookShop2021.Models;
 using System.Drawing;
 using System.IO;
-using Microsoft.AspNetCore.Hosting;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookShop2021.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class BooksController : Controller
     {
         private readonly BookContext _context;

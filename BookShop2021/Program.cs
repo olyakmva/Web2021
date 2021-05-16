@@ -10,27 +10,28 @@ namespace BookShop2021
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
+            //IWebHost host = CreateWebHostBuilder(args).Build(); //.Run();
 
-            //using (var scope = host.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-            //    try
-            //    {
-            //        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-            //        var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-            //        await RoleInitializer.InitializeAsync(userManager, rolesManager);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        var logger = services.GetRequiredService<ILogger<Program>>();
-            //        logger.LogError(ex, "An error occurred while seeding the database.");
-            //    }
-            //}
+            // using (var scope = host.Services.CreateScope())
+            // {
+            //     var services = scope.ServiceProvider;
+            //     try
+            //     {
+            //         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+            //         var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            //         await RoleInitializer.InitializeAsync(userManager, rolesManager);
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         var logger = services.GetRequiredService<ILogger<Program>>();
+            //         logger.LogError(ex, "An error occurred while seeding the database.");
+            //     }
+            // }
 
-            //host.Run();
+            // host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
@@ -43,7 +44,7 @@ namespace BookShop2021
         public static async Task InitializeAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             string adminEmail = "admin@mail.ru";
-            string password = "_boss21";
+            string password = "_Boss2021";
             if (await roleManager.FindByNameAsync("admin") == null)
             {
                 await roleManager.CreateAsync(new IdentityRole("admin"));

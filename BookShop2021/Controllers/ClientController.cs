@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace BookShop2021.Controllers
 {
@@ -75,19 +78,19 @@ namespace BookShop2021.Controllers
             return View(review);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult LeaveReview([Bind(Include = "Id,BookId,Text")] Review review)
-        //{
-        //    if (!ModelState.IsValid) return View();
-        //    var clientId = User.Identity.GetUserId();
-        //    review.ClientId = clientId;
-        //    var client = db.Clients.Find(clientId);
-        //    if (client != null) client.ReviewsNumber++;
-        //    db.Reviews.Add(review);
-        //    db.Entry(client).State = EntityState.Modified;
-        //    db.SaveChanges();
-        //    return RedirectToAction("Comments", "Client", new { id = clientId });
-        //}
+        [HttpPost]
+        public ActionResult LeaveReview([Bind( "Id,BookId,ClientId,Text")] Review review)
+        {
+            if (!ModelState.IsValid) return View();
+            var client = db.Clients.Find(review.ClientId);
+            if (client != null)
+            {
+                client.ReviewsNumber++;
+                db.Entry(client).State = EntityState.Modified;
+            }
+            db.Reviews.Add(review);
+            db.SaveChanges();
+            return RedirectToAction("GetPurchaseHistory", "Client");
+        }
     }
 }

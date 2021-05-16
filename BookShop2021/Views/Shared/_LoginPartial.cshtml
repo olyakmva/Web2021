@@ -12,7 +12,7 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <a asp-area="" asp-controller="Client" asp-action="Index" class="dropdown-item"> Профиль </a>
-              <a asp-area="" asp-controller="Client" asp-action="Index" class="dropdown-item"> Покупки </a>
+              <a asp-area="" asp-controller="Client" asp-action="GetPurchaseHistory" class="dropdown-item"> Покупки </a>
               <a asp-area="" asp-controller="Client" asp-action="Relax" class="dropdown-item"> Релаксация </a>
               <a asp-area="Identity" asp-page="/Account/Manage/Index" class="dropdown-item" title="Manage"> Настройки </a>
               <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="dropdown-item">

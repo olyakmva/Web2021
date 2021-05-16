@@ -5,62 +5,41 @@
 }
 
 <br />
-<div>
-    <h4>Информация о книге</h4>
-    <hr />
-    <br/>
-    @*<div class="row col-md-8 col col-md-offset-2 col-lg-6 col-lg-offset-3">
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Number)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Number)
-        </dd>
-        <dt>
-            Обложка:
-        </dt>
-        <dd>
+<h4>Информация о книге</h4>
+<hr />
+<br/>
+<div class="card mb-3 border-0" style="max-width: 540px;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
             @if (Model.ImageUrl != null)
             {
                 <img src="@Url.Content("~/images/")@Model.ImageUrl" />
             }
-        </dd>
-
-    </dl>
+         </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <label asp-for="Author" class="control-label"></label>
+                <h5 class="card-title">@Model.Author</h5>
+                <label asp-for="Name" class="control-label"></label>
+                <h5 class="card-title">@Model.Name</h5>
+                <p class="card-text">
+                    <label asp-for="Price" class="control-label"> </label>
+                    @Model.Price <br/>
+                    <label asp-for="Year" class="control-label"></label>
+                    @Model.Year <br/>
+                    <label asp-for="Number" class="control-label"></label>
+                    @Model.Number
+                </p>
+                <p class="card-text"><small class="text-muted">
+                    <label asp-for="Category" class="control-label"></label>
+                    @Model.Category.Name
+                </small></p>
+            </div>
+        </div>
+    </div>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Изменить</a> |
-    <a asp-action="Index">Назад к списку книг</a>
-</div>*@
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info">Изменить</a> |
+    <a asp-action="Index" class="btn btn-secondary">Назад к списку книг</a>
+</div>
