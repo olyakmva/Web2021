@@ -3,11 +3,22 @@
     ViewData["Title"] = "GetRoles";
 }
 
-<h2>GetRoles</h2>
+<h2> Роли, существующие на сайте </h2>
 
-<ul>
-    @foreach (var item in Model)
+<table class="table">
+    @foreach (var role in Model)
     {
-        <li>@item.Name</li>
+        <tr>
+            <td>@role.Name</td>
+            <td>
+                <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
     }
-</ul>
+</table>
+<a asp-action="CreateRole">Добавить роль</a>
+<a asp-action="Index">Список пользователей</a>

@@ -38,10 +38,15 @@ namespace BookShop2021
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(opts => {
+                    opts.Password.RequiredLength = 6;   // минимальная длина
+                    opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
+                    opts.Password.RequireLowercase = true; // требуются ли символы в нижнем регистре
+                    opts.Password.RequireUppercase = true; // требуются ли символы в верхнем регистре
+                    opts.Password.RequireDigit = true; // требуются ли цифры
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
            
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

@@ -3,30 +3,56 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
+
 @if (SignInManager.IsSignedIn(User))
 {
-    <ul class="navbar-nav navbar-right">
-       <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               @UserManager.GetUserName(User)
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a asp-area="" asp-controller="Client" asp-action="Index" class="dropdown-item"> Профиль </a>
-              <a asp-area="" asp-controller="Client" asp-action="GetPurchaseHistory" class="dropdown-item"> Покупки </a>
-              <a asp-area="" asp-controller="Client" asp-action="Relax" class="dropdown-item"> Релаксация </a>
-              <a asp-area="Identity" asp-page="/Account/Manage/Index" class="dropdown-item" title="Manage"> Настройки </a>
-              <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="dropdown-item">
-                  <button type="submit" class="btn btn-link navbar-btn navbar-link"> Выход </button>
-              </form>
-          </div>
-       </li>
-    </ul>
+    string userName = UserManager.GetUserName(User);
+    IdentityUser user = await UserManager.FindByNameAsync(userName);
+    @if (user != null && await UserManager.IsInRoleAsync(user, "admin"))
+    {
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @userName
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a asp-area="" asp-controller="Admin" asp-action="Index" class="dropdown-item"> Пользователи  </a>
+                    <a asp-area="" asp-controller="Admin" asp-action="GetRoles" class="dropdown-item"> Роли </a>
+                    <a asp-area="" asp-controller="Account" asp-action="ChangePassword"
+                       asp-route-name="@UserManager.GetUserName(User)" class="dropdown-item">Смена пароля</a>
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item">
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link"> Выход </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @UserManager.GetUserName(User)
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a asp-area="" asp-controller="Client" asp-action="Index" class="dropdown-item"> Профиль </a>
+                    <a asp-area="" asp-controller="Client" asp-action="GetPurchaseHistory" class="dropdown-item"> Покупки </a>
+                    <a asp-area="" asp-controller="Client" asp-action="Relax" class="dropdown-item"> Релаксация </a>
+                    <a asp-area="" asp-controller="Account" asp-action="ChangePassword"
+                       asp-route-name="@UserManager.GetUserName(User)" class="dropdown-item">Смена пароля</a>
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item">
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link"> Выход </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    }
 }
 else
 {
     <ul class="navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register" class="nav-link">_Регистрация_</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login" class="btn btn-secondary"> Вход </a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Register" class="nav-link">_Регистрация_</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-secondary"> Вход </a></li>
     </ul>
 }
 
