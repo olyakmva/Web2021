@@ -27,6 +27,27 @@
             </li>
         </ul>
     }
+    else if (user != null && await UserManager.IsInRoleAsync(user, "manager"))
+    {
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @userName
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a asp-area="" asp-controller="Manager" asp-action="GetOrdersNumber" class="dropdown-item"> Статистика по заказам  </a>
+                    <a asp-area="" asp-controller="Manager" asp-action="GetSmallNumberOfBooks" class="dropdown-item"> Остатки по книгам </a>
+                    <a asp-area="" asp-controller="Manager" asp-action="GetBestsellerList" class="dropdown-item"> Лучшие продажи </a>
+                    <a asp-area="" asp-controller="Books" asp-action="Index" class="dropdown-item">Управление книгами</a>
+                    <a asp-area="" asp-controller="Account" asp-action="ChangePassword"
+                       asp-route-name="@UserManager.GetUserName(User)" class="dropdown-item">Смена пароля</a>
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item">
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link"> Выход </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    }
     else
     {
         <ul class="navbar-nav navbar-right">

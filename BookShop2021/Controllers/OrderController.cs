@@ -50,6 +50,14 @@ namespace BookShop2021.Controllers
                     Quantity = item.Quantity,
                     TheBook = book
                 };
+                if (book.Number < item.Quantity)
+                {
+                    item.Quantity = book.Number;
+                }
+
+                book.Number -= item.Quantity;
+                db.Entry(book).State = EntityState.Modified;
+                db.SaveChanges();
                 goods.Add(good);
                 price += book.Price * item.Quantity;
             }
@@ -195,13 +203,20 @@ namespace BookShop2021.Controllers
             if (order == null)
                 return NotFound();
             var items = db.Items.Where(x => x.OrderId == id).ToList();
+           
+            foreach (var item in items)
+            {
+                var book = db.Books.Find(item.BookId);
+                if (book != null)
+                {
+                    book.Number += item.Quantity;
+                    db.Entry(book).State = EntityState.Modified;
+                }
+            }
             order.Items = items;
             db.Orders.Remove(order);
             db.SaveChanges();
             return RedirectToAction("Index", "Home");
-
         }
-
-
     }
 }

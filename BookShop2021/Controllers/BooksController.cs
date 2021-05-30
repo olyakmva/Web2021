@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BookShop2021.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "manager")]
     public class BooksController : Controller
     {
         private readonly BookContext _context;
